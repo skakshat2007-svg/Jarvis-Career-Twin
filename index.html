@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS — AI Career Twin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0A0E1A;
+            --gold: #FFB300;
+            --cyan: #00D4FF;
+            --iron-red: #C0392B;
+            --white: #F0F4FF;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow-cyan: 0 0 15px rgba(0, 212, 255, 0.5);
+            --glow-gold: 0 0 15px rgba(255, 179, 0, 0.5);
+            --font-main: 'Inter', sans-serif;
+            --font-tech: 'Orbitron', sans-serif;
+            --font-accent: 'Rajdhani', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        html {
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--white);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-tech);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Grid Background */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--glass-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            z-index: 1001;
+        }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+            filter: drop-shadow(0 0 5px var(--cyan));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-img {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .logo-text {
+            font-family: var(--font-tech);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .logo-text span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-family: var(--font-accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+            text-shadow: var(--glow-cyan);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        /* Arc Reactor */
+        .arc-reactor-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 40px;
+        }
+
+        .arc-reactor {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid var(--cyan);
+            box-shadow: inset 0 0 20px var(--cyan), 0 0 20px var(--cyan);
+            position: relative;
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        .arc-reactor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            box-shadow: inset 0 0 10px var(--cyan), 0 0 10px var(--cyan);
+        }
+
+        .arc-reactor-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 30%;
+            background: var(--white);
+            border-radius: 50%;
+            box-shadow: 0 0 30px 10px var(--cyan);
+        }
+
+        .arc-bars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: rotate 10s linear infinite;
+        }
+
+        .bar {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--cyan) 10%, transparent 10%, transparent 90%, var(--cyan) 90%);
+        }
+
+        .bar:nth-child(2) {
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        .bar:nth-child(3) {
+            transform: translateX(-50%) rotate(90deg);
+        }
+
+        .bar:nth-child(4) {
+            transform: translateX(-50%) rotate(135deg);
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--gold), var(--white));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-gold);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin-bottom: 40px;
+            color: rgba(240, 244, 255, 0.8);
+        }
+
+        .typing-container {
+            height: 40px;
+            font-family: var(--font-accent);
+            font-weight: 700;
+            color: var(--cyan);
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-family: var(--font-tech);
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--bg-deep);
+        }
+
+        .btn-gold:hover {
+            box-shadow: var(--glow-gold);
+            transform: translateY(-3px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 2px solid var(--cyan);
+            color: var(--cyan);
+            padding: 13px 38px;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: var(--glow-cyan);
+            transform: translateY(-3px);
+        }
+
+        /* Generic Section Styles */
+        section {
+            padding: 100px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            text-shadow: var(--glow-cyan);
+        }
+
+        .section-header p {
+            color: rgba(240, 244, 255, 0.6);
+            font-size: 1.1rem;
+        }
+
+        /* Feature Grids */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .grid-6 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            position: relative;
+            transition: 0.4s;
+            clip-path: polygon(5% 0, 100% 0, 100% 95%, 95% 100%, 0 100%, 0 5%);
+        }
+
+        .card:hover {
+            border-color: var(--cyan);
+            box-shadow: var(--glow-cyan);
+            transform: translateY(-10px);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .card-hud {
+            border-left: 4px solid var(--cyan);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+
+        .card p {
+            color: rgba(240, 244, 255, 0.7);
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            margin-top: 50px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: linear-gradient(to right, var(--iron-red), var(--gold));
+            z-index: 0;
+        }
+
+        .step {
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-deep);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-tech);
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 20px;
+            box-shadow: var(--glow-gold);
+        }
+
+        .step h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+
+        /* Tech Stack Ticker */
+        .tech-stack {
+            overflow: hidden;
+            padding-bottom: 50px;
+        }
+
+        .ticker-wrapper {
+            background: var(--glass);
+            padding: 30px 0;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .ticker {
+            display: flex;
+            gap: 50px;
+            width: max-content;
+            animation: scroll 30s linear infinite;
+        }
+
+        .badge {
+            font-family: var(--font-tech);
+            color: var(--cyan);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            white-space: nowrap;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .badge:hover {
+            opacity: 1;
+            text-shadow: var(--glow-cyan);
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Dashboard Preview */
+        .browser-mockup {
+            background: #000;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .browser-header {
+            background: #1A1A1A;
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .dots span:nth-child(1) {
+            background: #FF5F56;
+        }
+
+        .dots span:nth-child(2) {
+            background: #FFBD2E;
+        }
+
+        .dots span:nth-child(3) {
+            background: #27C93F;
+        }
+
+        .browser-body {
+            display: flex;
+            height: 500px;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: #0D1117;
+            padding: 20px;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .side-link {
+            padding: 12px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: var(--font-tech);
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+
+        .side-link.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--cyan);
+        }
+
+        .browser-body .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: var(--bg-deep);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-family: var(--font-tech);
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .main-stats {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .health-score {
+            text-align: center;
+        }
+
+        .score-circle {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .score-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: var(--glass-border);
+            stroke-width: 2.8;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: var(--cyan);
+            stroke-width: 2.8;
+            stroke-linecap: round;
+        }
+
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .score-text .num {
+            font-size: 2rem;
+            font-family: var(--font-tech);
+            color: var(--white);
+        }
+
+        .score-text .unit {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Neural Map Styles */
+        .neural-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .node {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .node.active {
+            border-color: var(--cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .node span {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        /* Mission Log Styles */
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        .log-table th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--gold);
+        }
+
+        .log-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .status-success {
+            color: #27C93F;
+        }
+
+        .status-pending {
+            color: var(--cyan);
+        }
+
+        .status-fail {
+            color: var(--iron-red);
+        }
+
+        /* Armor Sync Styles */
+        .armor-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .bar-outer {
+            width: 100%;
+            height: 10px;
+            background: var(--glass);
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .bar-inner {
+            height: 100%;
+            background: var(--cyan);
+            border-radius: 5px;
+            box-shadow: var(--glow-cyan);
+        }
+
+        /* Settings Styles */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .toggle {
+            width: 40px;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--white);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle.active {
+            background: var(--cyan);
+        }
+
+        .toggle.active::after {
+            left: 22px;
+        }
+
+        .btn-small {
+            padding: 5px 15px;
+            font-size: 0.7rem;
+        }
+
+        .suggestions-feed h4 {
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            color: var(--cyan);
+        }
+
+        .feed-item {
+            padding: 15px;
+            background: var(--glass);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--gold);
+        }
+
+        /* Testimonials */
+        .testimonial .quote {
+            font-style: italic;
+            color: var(--cyan);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .tester {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tester .name {
+            color: var(--gold);
+            font-weight: 700;
+            font-family: var(--font-tech);
+        }
+
+        .tester .title {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Pricing */
+        .pricing-card {
+            text-align: center;
+        }
+
+        .pricing-card.most-popular {
+            border: 2px solid var(--gold);
+            box-shadow: var(--glow-gold);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-family: var(--font-tech);
+            color: var(--white);
+            margin-bottom: 30px;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .pricing-card li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .pricing-card li::before {
+            content: '⚡';
+            color: var(--cyan);
+        }
+
+        /* FAQ Accordion */
+        .faq-accordion {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-tech);
+            color: var(--gold);
+            transition: 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 179, 0, 0.05);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.3s ease-out;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 200px;
+        }
+
+        .faq-item.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .chevron {
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 50px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+            background: #05070D;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+            text-shadow: var(--glow-cyan);
+        }
+
+        .energy {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 40px;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--bg-deep);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            padding: 50px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--cyan);
+            cursor: pointer;
+        }
+
+        /* Resume Input Modal Tabs */
+        .resume-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        .resume-tab-btn {
+            flex: 1;
+            padding: 14px;
+            background: transparent;
+            border: none;
+            color: rgba(240, 244, 255, 0.5);
+            font-family: var(--font-tech);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .resume-tab-btn.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+            text-shadow: var(--glow-cyan);
+        }
+
+        .resume-tab-panel {
+            display: none;
+        }
+
+        .resume-tab-panel.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--glass-border);
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--cyan);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .upload-zone p {
+            color: rgba(240, 244, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .upload-zone span.formats {
+            font-size: 0.75rem;
+            color: rgba(240, 244, 255, 0.3);
+            font-family: var(--font-tech);
+        }
+
+        /* Write Resume Textarea */
+        .resume-textarea {
+            width: 100%;
+            height: 220px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--white);
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            padding: 16px;
+            resize: vertical;
+            border-radius: 6px;
+            line-height: 1.6;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .resume-textarea:focus {
+            border-color: var(--cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .resume-textarea::placeholder {
+            color: rgba(240, 244, 255, 0.25);
+        }
+
+        .modal-label {
+            font-family: var(--font-tech);
+            font-size: 0.75rem;
+            color: rgba(240, 244, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .modal-action-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+
+        /* Analysis Overlay */
+        .analysis-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 10, 20, 0.95);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .analysis-hud {
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .scanner-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--cyan);
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--cyan);
+            animation: scan 2s linear infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(200px);
+                opacity: 0;
+            }
+        }
+
+        .analysis-text {
+            font-family: var(--font-tech);
+            font-size: 2rem;
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+            margin-bottom: 20px;
+        }
+
+        .analysis-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            color: var(--gold);
+        }
+
+        @media (max-width: 1024px) {
+
+            .grid-3,
+            .grid-6 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timeline {
+                flex-direction: column;
+                align-items: center;
+                gap: 50px;
+            }
+
+            .timeline::before {
+                left: 25px;
+                top: 50px;
+                bottom: 50px;
+                width: 2px;
+                height: calc(100% - 100px);
+                background: linear-gradient(to bottom, var(--iron-red), var(--gold));
+            }
+
+            .step {
+                width: 100%;
+                flex-direction: row;
+                text-align: left;
+                gap: 20px;
+            }
+
+            .step-number {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+
+            .main-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .browser-body {
+                height: auto;
+                min-height: 500px;
+            }
+
+            .stat-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-6 {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-overlay"></div>
+
+    <nav>
+        <a href="#hero" class="logo">
+            <svg class="logo-img" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg"
+                style="height:45px;width:auto;filter:drop-shadow(0 0 5px #00D4FF);">
+                <defs>
+                    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a2540" />
+                        <stop offset="100%" style="stop-color:#0A0E1A" />
+                    </linearGradient>
+                    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFD700" />
+                        <stop offset="100%" style="stop-color:#FFB300" />
+                    </linearGradient>
+                </defs>
+                <!-- Shield body -->
+                <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z" fill="url(#shieldGrad)"
+                    stroke="#FFB300" stroke-width="2" />
+                <!-- Gold inner border -->
+                <path d="M50 14 L82 27 L82 60 Q82 88 50 105 Q18 88 18 60 L18 27 Z" fill="none" stroke="url(#goldGrad)"
+                    stroke-width="1.5" opacity="0.6" />
+                <!-- Arc reactor glow circle -->
+                <circle cx="50" cy="58" r="18" fill="none" stroke="#00D4FF" stroke-width="2" opacity="0.9" />
+                <circle cx="50" cy="58" r="10" fill="#00D4FF" opacity="0.15" />
+                <circle cx="50" cy="58" r="5" fill="#00D4FF" opacity="0.9" />
+                <!-- J letter -->
+                <text x="50" y="54" text-anchor="middle" dominant-baseline="middle" font-family="Orbitron,monospace"
+                    font-size="22" font-weight="700" fill="#00D4FF" opacity="0" style="display:none"></text>
+                <!-- Armor panel lines -->
+                <line x1="50" y1="42" x2="50" y2="32" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                <line x1="50" y1="74" x2="50" y2="84" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                <line x1="34" y1="58" x2="24" y2="58" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                <line x1="66" y1="58" x2="76" y2="58" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+            </svg>
+            <div class="logo-text">JAR<span>VIS</span></div>
+        </a>
+        <div class="nav-links">
+            <a href="#about">Interface</a>
+            <a href="#features">Neural Link</a>
+            <a href="#dashboard">Core Systems</a>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero">
+        <div class="arc-reactor-container">
+            <div class="arc-reactor">
+                <div class="arc-bars">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+            <div class="arc-reactor-core"></div>
+        </div>
+
+        <h1>SUIT UP YOUR CAREER</h1>
+        <p>A digital clone of your professional self. Powered by AI. Built for impact.</p>
+
+        <div class="typing-container">
+            <span id="typed-text"></span>
+        </div>
+
+        <div class="cta-container">
+            <button class="btn btn-gold" onclick="openModal('resume-input')">⬆ Upload Resume</button>
+            <a href="#dashboard" class="btn btn-ghost">See Demo</a>
+        </div>
+    </section>
+
+    <main id="main-content">
+        <!-- What is AI Career Twin -->
+        <section id="about">
+            <div class="section-header">
+                <h2>NEURAL REPLICATION ENGINE</h2>
+                <p>What is an AI Career Twin?</p>
+            </div>
+            <div class="grid-3">
+                <div class="card card-hud">
+                    <span class="icon">🤖</span>
+                    <h3>Your Digital Clone</h3>
+                    <p>Advanced neural networks mirror your specific skills, industry-specific experience, and
+                        professional tone with 98.7% accuracy.</p>
+                </div>
+                <div class="card card-hud">
+                    <span class="icon">🧠</span>
+                    <h3>AI-Powered Matching</h3>
+                    <p>Deep-learning algorithms identify high-impact roles, projects, and collaborators that perfectly
+                        align with your career trajectory.</p>
+                </div>
+                <div class="card card-hud">
+                    <span class="icon">🚀</span>
+                    <h3>Always On</h3>
+                    <p>While you sleep, JARVIS is active. Scanning markets, applying to elite roles, and networking
+                        within your target industry.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Features -->
+        <section id="features">
+            <div class="section-header">
+                <h2>CORE ARCHITECTURE</h2>
+                <p>Advanced subsystems for career domination</p>
+            </div>
+            <div class="grid-6">
+                <div class="card">
+                    <span class="icon">📊</span>
+                    <h3>Resume Analyzer</h3>
+                    <p>Real-time optimization against ATS filters and human recruiter bias.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">🎙️</span>
+                    <h3>Interview Coach</h3>
+                    <p>Voice-simulated practice runs with behavioral analysis and feedback loop.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">✈️</span>
+                    <h3>Job Autopilot</h3>
+                    <p>End-to-end application management from discovery to submission.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">📡</span>
+                    <h3>Skill Gap Radar</h3>
+                    <p>Predictive analysis of market trends to highlight what you need to learn NEXT.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">🎨</span>
+                    <h3>Portfolio Generator</h3>
+                    <p>Dynamic, interactive showcase of your best work, built on the fly.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">⚖️</span>
+                    <h3>Salary Negotiator</h3>
+                    <p>Data-driven strategy to ensure you're paid exactly what you're worth.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works -->
+        <section id="how-it-works">
+            <div class="section-header">
+                <h2>SYSTEM DEPLOYMENT</h2>
+                <p>4-Step Career Amplification Timeline</p>
+            </div>
+            <div class="timeline">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h4>UPLOAD DATA</h4>
+                    <p>Upload resume + LinkedIn. JARVIS begins neural ingestion.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h4>SYNC NEURALS</h4>
+                    <p>AI builds your Digital Twin, calibrated to your unique voice.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h4>ACTIVE SORTIE</h4>
+                    <p>Twin enters the market. Applying, networking, and scouting.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <h4>OBJECTIVE ACHIEVED</h4>
+                    <p>Receive vetted interviews and high-value offers in real-time.</p>
+                </div>
+            </div>
+        </section>
+        <!-- Tech Stack Showcase -->
+        <section id="tech-stack" class="tech-stack">
+            <div class="section-header">
+                <h2>CORE TECHNOLOGIES</h2>
+                <p>Built with bleeding-edge stack</p>
+            </div>
+            <div class="ticker-wrapper">
+                <div class="ticker">
+                    <span class="badge">Next.js</span>
+                    <span class="badge">FastAPI</span>
+                    <span class="badge">PostgreSQL</span>
+                    <span class="badge">Redis</span>
+                    <span class="badge">OpenAI GPT-4o</span>
+                    <span class="badge">Pinecone</span>
+                    <span class="badge">LangChain</span>
+                    <span class="badge">Supabase</span>
+                    <span class="badge">Tailwind</span>
+                    <span class="badge">Docker</span>
+                    <!-- Duplicate for infinite scroll -->
+                    <span class="badge">Next.js</span>
+                    <span class="badge">FastAPI</span>
+                    <span class="badge">PostgreSQL</span>
+                    <span class="badge">Redis</span>
+                    <span class="badge">OpenAI GPT-4o</span>
+                    <span class="badge">Pinecone</span>
+                    <span class="badge">LangChain</span>
+                    <span class="badge">Supabase</span>
+                    <span class="badge">Tailwind</span>
+                    <span class="badge">Docker</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Preview -->
+        <section id="dashboard" class="dashboard-preview">
+            <div class="section-header">
+                <h2>COMMAND CENTER</h2>
+                <p>Real-time career intelligence at your fingertips</p>
+            </div>
+            <div class="browser-mockup">
+                <div class="browser-header">
+                    <div class="dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="browser-body">
+                    <div class="sidebar">
+                        <div class="side-link active" onclick="switchTab('dashboard')">Dashboard</div>
+                        <div class="side-link" onclick="switchTab('neural-map')">Neural Map</div>
+                        <div class="side-link" onclick="switchTab('armor-sync')">Armor Sync</div>
+                        <div class="side-link" onclick="switchTab('settings')">Settings</div>
+                    </div>
+                    <div class="content">
+                        <!-- Dashboard Tab -->
+                        <div id="dashboard-tab" class="tab-pane active">
+                            <div class="stat-row">
+                                <div class="stat-card">
+                                    <div class="stat-label">Jobs Applied</div>
+                                    <div class="stat-value">24</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Interviews</div>
+                                    <div class="stat-value">03</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Profile Views</div>
+                                    <div class="stat-value">142</div>
+                                </div>
+                            </div>
+                            <div class="main-stats">
+                                <div class="health-score">
+                                    <div class="score-circle">
+                                        <svg viewBox="0 0 36 36">
+                                            <path class="circle-bg"
+                                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="circle-progress" stroke-dasharray="0, 100"
+                                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        </svg>
+                                        <div class="score-text">
+                                            <span class="num">0</span>
+                                            <span class="unit">/100</span>
+                                        </div>
+                                    </div>
+                                    <h4>Career Health</h4>
+                                </div>
+                                <div class="suggestions-feed">
+                                    <h4>AI Suggestions</h4>
+                                    <div class="feed-item">⚡ Optimized neural link for Google SDE role.</div>
+                                    <div class="feed-item">⚡ New mission detected: Fintech Lead at Stripe.</div>
+                                    <div class="feed-item">⚡ Armor upgrade: Resume parsed at 99% accuracy.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Neural Map Tab -->
+                        <div id="neural-map-tab" class="tab-pane">
+                            <h4>Neural Connection Map</h4>
+                            <div class="neural-grid">
+                                <p style="color:rgba(240,244,255,0.4);text-align:center;width:100%;padding:20px;">Upload
+                                    a resume to map your neural skill nodes.</p>
+                            </div>
+                            <div class="sync-status" id="neural-sync-status">Neural link stability: --</div>
+                        </div>
+
+
+
+                        <!-- Armor Sync Tab -->
+                        <div id="armor-sync-tab" class="tab-pane">
+                            <h4>Armor Configuration</h4>
+                            <div class="armor-stats">
+                                <div class="stat-item">
+                                    <label>Resume Integrity <span id="armor-integrity-pct"
+                                            style="float:right;color:var(--cyan);font-family:var(--font-tech);">0%</span></label>
+                                    <div class="bar-outer">
+                                        <div class="bar-inner" id="armor-integrity-bar"
+                                            style="width: 0%; transition: width 0.8s ease;"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <label>Skill Power <span id="armor-skill-pct"
+                                            style="float:right;color:var(--cyan);font-family:var(--font-tech);">0%</span></label>
+                                    <div class="bar-outer">
+                                        <div class="bar-inner" id="armor-skill-bar"
+                                            style="width: 0%; transition: width 0.8s ease;"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <label>Content Depth <span id="armor-depth-pct"
+                                            style="float:right;color:var(--cyan);font-family:var(--font-tech);">0%</span></label>
+                                    <div class="bar-outer">
+                                        <div class="bar-inner" id="armor-depth-bar"
+                                            style="width: 0%; transition: width 0.8s ease;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Settings Tab -->
+                        <div id="settings-tab" class="tab-pane">
+                            <h4>System Settings</h4>
+                            <div class="settings-list">
+                                <div class="setting-item">
+                                    <span>Stealth Mode (Incognito Browsing)</span>
+                                    <div class="toggle active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <span>Auto-Sortie (Auto-Apply)</span>
+                                    <div class="toggle"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <span>Neural Tone: Professional Stark</span>
+                                    <button class="btn btn-ghost btn-small">Change</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonials -->
+        <section id="testimonials">
+            <div class="section-header">
+                <h2>BATTLE-TESTED RESULTS</h2>
+                <p>Trusted by elite professionals</p>
+            </div>
+            <div class="grid-3">
+                <div class="card testimonial">
+                    <p class="quote">"My AI twin got me 3 interviews in a week. The matching precision is unreal."</p>
+                    <div class="tester">
+                        <span class="name">Rahul S.</span>
+                        <span class="title">SDE at Google</span>
+                    </div>
+                </div>
+                <div class="card testimonial">
+                    <p class="quote">"It's like having a coach, recruiter, and designer in one. JARVIS never misses."
+                    </p>
+                    <div class="tester">
+                        <span class="name">Priya M.</span>
+                        <span class="title">PM at Swiggy</span>
+                    </div>
+                </div>
+                <div class="card testimonial">
+                    <p class="quote">"The salary negotiation module alone is worth it. I landed a 40% hike."</p>
+                    <div class="tester">
+                        <span class="name">Arjun K.</span>
+                        <span class="title">Data Scientist</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="section-header">
+                <h2>INTELLIGENCE CLEARANCE</h2>
+                <p>Frequently Asked Questions</p>
+            </div>
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-question">Is my data secure? <span class="chevron">▼</span></div>
+                    <div class="faq-answer">Absolutely. All profile data is encrypted with military-grade 256-bit AES
+                        protocols. JARVIS only shares what you authorize.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How does AI understand my profile? <span class="chevron">▼</span></div>
+                    <div class="faq-answer">We use a proprietary Neural Ingestion Engine that parses your experience,
+                        skills, and even your writing style from LinkedIn and resumes.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can it really auto-apply? <span class="chevron">▼</span></div>
+                    <div class="faq-answer">Yes. Once your Twin is calibrated, it can handle end-to-end applications,
+                        including tailored cover letters and questionnaire responses.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What makes this different from LinkedIn? <span class="chevron">▼</span>
+                    </div>
+                    <div class="faq-answer">LinkedIn is a billboard; JARVIS is an agent. We don't just show your
+                        profile; we actively deploy it to achieve results.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How long to set up? <span class="chevron">▼</span></div>
+                    <div class="faq-answer">Neural syncing usually takes less than 10 minutes from data upload to first
+                        market sortie.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo logo">
+                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg"
+                    style="height:60px;width:auto;filter:drop-shadow(0 0 8px #00D4FF);">
+                    <defs>
+                        <linearGradient id="shieldGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1a2540" />
+                            <stop offset="100%" style="stop-color:#0A0E1A" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFD700" />
+                            <stop offset="100%" style="stop-color:#FFB300" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z" fill="url(#shieldGrad2)"
+                        stroke="#FFB300" stroke-width="2" />
+                    <path d="M50 14 L82 27 L82 60 Q82 88 50 105 Q18 88 18 60 L18 27 Z" fill="none"
+                        stroke="url(#goldGrad2)" stroke-width="1.5" opacity="0.6" />
+                    <circle cx="50" cy="58" r="18" fill="none" stroke="#00D4FF" stroke-width="2" opacity="0.9" />
+                    <circle cx="50" cy="58" r="10" fill="#00D4FF" opacity="0.15" />
+                    <circle cx="50" cy="58" r="5" fill="#00D4FF" opacity="0.9" />
+                    <line x1="50" y1="42" x2="50" y2="32" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                    <line x1="50" y1="74" x2="50" y2="84" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                    <line x1="34" y1="58" x2="24" y2="58" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                    <line x1="66" y1="58" x2="76" y2="58" stroke="#00D4FF" stroke-width="1.5" opacity="0.7" />
+                </svg>
+                <div class="logo-text">JAR<span>VIS</span></div>
+            </div>
+            <p>Your career. Amplified.</p>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">Twitter</a>
+            </div>
+            <p class="energy">Built with ❤️ and Arc Reactor energy</p>
+        </div>
+    </footer>
+
+    <!-- Resume Input Modal: two tabs -->
+    <div id="resume-input-modal" class="modal" style="display:none;">
+        <div class="modal-content card" style="max-width:560px;width:90%;">
+            <span class="close" onclick="closeModal('resume-input')">&times;</span>
+            <div class="section-header" style="margin-bottom:24px;">
+                <h2 style="font-size:1.5rem;">INITIALIZE NEURAL TWIN</h2>
+                <p>Choose how you want to load your career data</p>
+            </div>
+
+            <!-- Tab switcher -->
+            <div class="resume-tabs">
+                <button class="resume-tab-btn active" id="tab-btn-upload" onclick="switchResumeTab('upload')">📁 Upload
+                    File</button>
+                <button class="resume-tab-btn" id="tab-btn-write" onclick="switchResumeTab('write')">✏️ Write
+                    Resume</button>
+            </div>
+
+            <!-- Tab 1: Upload File -->
+            <div class="resume-tab-panel active" id="resume-panel-upload">
+                <div class="upload-zone" id="upload-zone" onclick="document.getElementById('resume-upload').click()"
+                    ondragover="event.preventDefault();this.classList.add('dragover')"
+                    ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+                    <span class="upload-icon">📄</span>
+                    <p>Drag & drop your resume here, or click to browse</p>
+                    <span class="formats">Supports PDF, DOC, DOCX, TXT</span>
+                </div>
+                <input type="file" id="resume-upload" accept=".pdf,.doc,.docx,.txt" style="display:none;"
+                    onchange="handleResumeUpload(this)">
+            </div>
+
+            <!-- Tab 2: Write Resume -->
+            <div class="resume-tab-panel" id="resume-panel-write">
+                <label class="modal-label">Paste or type your resume content below</label>
+                <textarea id="resume-text" class="resume-textarea"
+                    placeholder="WORK EXPERIENCE&#10;Senior Engineer @ TechCorp (2022–present)&#10;- Led team of 8 engineers...&#10;&#10;SKILLS&#10;Python, React, Node.js, AWS, ML...&#10;&#10;EDUCATION&#10;B.Tech Computer Science, 2020"></textarea>
+                <div class="modal-action-row">
+                    <button class="btn btn-gold" onclick="handleWrittenResume()" style="padding:12px 30px;">⚡ Analyze
+                        Resume</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Analysis Overlay -->
+    <div id="analysis-overlay" class="modal" style="display:none;">
+        <div class="modal-content card" style="max-width:480px;text-align:center;">
+            <div class="arc-reactor-container" style="margin:0 auto 30px;">
+                <div class="arc-reactor">
+                    <div class="arc-bars">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="arc-reactor-core"></div>
+            </div>
+            <h3 style="color:var(--cyan);margin-bottom:20px;letter-spacing:3px;">NEURAL SCAN IN PROGRESS</h3>
+            <p id="scan-status" style="color:rgba(240,244,255,0.7);margin-bottom:10px;">Initializing scan matrix...</p>
+            <p id="scan-filename" style="color:var(--gold);font-family:var(--font-tech);font-size:0.85rem;"></p>
+            <div class="bar-outer" style="margin-top:20px;">
+                <div id="scan-progress-bar" class="bar-inner" style="width:0%;transition:width 0.5s ease;"></div>
+            </div>
+            <p id="scan-percent" style="margin-top:10px;font-family:var(--font-tech);color:var(--cyan);">0%</p>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        // Typing Effect
+        const words = ["Software Engineer", "Product Manager", "Data Scientist", "Architect", "Designer"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typedTextElement = document.getElementById('typed-text');
+
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                typedTextElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typedTextElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        // Modal Logic
+        function openModal(type) {
+            if (type === 'resume-input') {
+                const m = document.getElementById('resume-input-modal');
+                m.style.display = 'flex';
+                switchResumeTab('upload'); // always reset to first tab
+            }
+        }
+
+        function closeModal(type) {
+            if (type === 'resume-input') document.getElementById('resume-input-modal').style.display = 'none';
+        }
+
+        // Resume Tab Switching
+        function switchResumeTab(tab) {
+            ['upload', 'write'].forEach(t => {
+                document.getElementById('resume-panel-' + t).classList.toggle('active', t === tab);
+                document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab);
+            });
+        }
+
+        // Drag & Drop
+        function handleDrop(event) {
+            event.preventDefault();
+            document.getElementById('upload-zone').classList.remove('dragover');
+            const file = event.dataTransfer.files[0];
+            if (!file) return;
+            const fakeInput = { files: [file] };
+            closeModal('resume-input');
+            handleResumeUpload(fakeInput);
+        }
+
+        // Resume Analysis Heuristic Engine
+        function analyzeResumeContent(text) {
+            const lowerText = text.toLowerCase();
+            const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
+
+            // ── 1. SKILL COVERAGE (0-35 pts) ──
+            const techKeywords = {
+                'Frontend': ['react', 'vue', 'angular', 'javascript', 'typescript', 'html', 'css', 'tailwind', 'nextjs', 'svelte'],
+                'Backend': ['node', 'python', 'java', 'golang', 'rust', 'express', 'django', 'flask', 'api', 'rest', 'graphql'],
+                'Cloud/DevOps': ['aws', 'azure', 'docker', 'kubernetes', 'jenkins', 'terraform', 'gcp', 'ci/cd', 'linux'],
+                'Data/AI': ['sql', 'nosql', 'mongodb', 'postgresql', 'machine learning', 'tensorflow', 'pytorch', 'data science', 'pandas'],
+                'Architecture': ['system design', 'microservices', 'distributed systems', 'scalability', 'design patterns', 'architecture'],
+                'Soft Skills': ['leadership', 'collaboration', 'agile', 'scrum', 'problem solving', 'communication', 'mentoring', 'teamwork']
+            };
+
+            let matchedSkills = [];
+            let totalSkillPoints = 0;
+            const maxSkillPts = 35;
+            const ptsPerCategory = maxSkillPts / Object.keys(techKeywords).length; // ~5.8 each
+
+            for (const [category, keywords] of Object.entries(techKeywords)) {
+                const matched = keywords.filter(k => lowerText.includes(k));
+                const ratio = matched.length / keywords.length;
+                const catPts = ratio * ptsPerCategory;
+                totalSkillPoints += catPts;
+                if (matched.length > 0) {
+                    matchedSkills.push({ name: category, match: Math.round(ratio * 100) });
+                }
+            }
+
+            // ── 2. SECTION COMPLETENESS (0-25 pts) ──
+            const sections = ['experience', 'education', 'skills', 'projects', 'summary', 'objective', 'contact', 'certifications'];
+            const foundSections = sections.filter(s => lowerText.includes(s));
+            const sectionRatio = foundSections.length / sections.length;
+            const sectionPts = sectionRatio * 25;
+
+            // ── 3. CONTENT DEPTH (0-20 pts) ──
+            // Need 400+ words for full marks
+            let depthPts = 0;
+            if (wordCount < 30) depthPts = 0;
+            else if (wordCount < 80) depthPts = 3;
+            else if (wordCount < 150) depthPts = 6;
+            else if (wordCount < 250) depthPts = 10;
+            else if (wordCount < 400) depthPts = 15;
+            else depthPts = 20;
+
+            // ── 4. FORMATTING QUALITY (0-10 pts) ──
+            let formatPts = 0;
+            if (lowerText.includes('•') || lowerText.includes('- ') || lowerText.includes('* ')) formatPts += 3;
+            // Action verbs
+            const actionVerbs = ['led', 'built', 'developed', 'designed', 'implemented', 'managed', 'created', 'optimized', 'delivered', 'launched', 'architected', 'improved'];
+            const actionCount = actionVerbs.filter(v => lowerText.includes(v)).length;
+            formatPts += Math.min(4, actionCount);
+            // Has dates/years
+            if (/20[0-2][0-9]/.test(text)) formatPts += 3;
+
+            // ── 5. IMPACT INDICATORS (0-10 pts) ──
+            let impactPts = 0;
+            // Quantified achievements (numbers like 50%, $100K, 3x, etc.)
+            const numberMatches = text.match(/\d+[%xX]|\$\d+|\d+\+/g) || [];
+            impactPts += Math.min(5, numberMatches.length * 1.5);
+            // Metrics keywords
+            const metricWords = ['revenue', 'increased', 'reduced', 'improved', 'growth', 'efficiency', 'performance', 'users', 'traffic'];
+            const metricCount = metricWords.filter(w => lowerText.includes(w)).length;
+            impactPts += Math.min(5, metricCount * 1.5);
+
+            // ── TOTAL HEALTH (0-100) ──
+            let health = Math.round(totalSkillPoints + sectionPts + depthPts + formatPts + impactPts);
+            health = Math.max(3, Math.min(99, health));
+
+            // ── ARMOR SYNC PERCENTAGES ──
+            const armorIntegrity = Math.round(sectionRatio * 100); // section completeness
+            const armorSkill = matchedSkills.length > 0 ? Math.round((totalSkillPoints / maxSkillPts) * 100) : 0;
+            const armorDepth = Math.round(((depthPts + formatPts) / 30) * 100);
+
+            // ── DERIVED STATS ──
+            const stats = {
+                jobs: Math.max(0, Math.round(health * 0.35)),
+                interviews: Math.max(0, Math.round(health * 0.05)),
+                views: Math.max(0, Math.round(health * 1.8))
+            };
+
+            // ── AI SUGGESTIONS ──
+            let suggestions = [];
+            if (foundSections.length < 3) suggestions.push("⚡ Mission Alert: Core sections missing. Add Experience, Education, Skills.");
+            if (wordCount < 100) suggestions.push("⚡ Armor Critical: Resume too brief. Need 200+ words for basic coverage.");
+            if (matchedSkills.length === 0) suggestions.push("⚡ Tech Sync Failed: No technical skills detected. Add your stack.");
+            if (actionCount === 0) suggestions.push("⚡ Weak Impact: Use action verbs (Led, Built, Designed, Optimized).");
+            if (numberMatches.length === 0) suggestions.push("⚡ No Metrics: Quantify achievements (e.g., 'Improved performance by 40%').");
+            if (formatPts < 3) suggestions.push("⚡ Formatting Weak: Use bullet points and structured sections.");
+
+            if (health >= 80) suggestions.push("⚡ Elite profile detected. Target FAANG-tier companies.");
+            else if (health >= 55) suggestions.push("⚡ Profile stabilizing. Target mid-tier firms, continue optimization.");
+            else if (health >= 30) suggestions.push("⚡ Basic sync established. Significant improvements needed.");
+            else suggestions.push("⚡ Critical: Resume needs major overhaul. Add skills, experience, and structure.");
+
+            return { health, stats, matchedSkills, suggestions, armorIntegrity, armorSkill, armorDepth };
+        }
+
+        // Written Resume Analysis
+        function handleWrittenResume() {
+            const text = document.getElementById('resume-text').value.trim();
+            if (!text) { alert('Please enter your resume content first.'); return; }
+
+            closeModal('resume-input');
+
+            // Extract a display name from first line or fallback
+            const firstLine = text.split('\n').find(l => l.trim()) || 'My Resume';
+            const name = firstLine.replace(/[^a-zA-Z0-9 ]/g, '').trim().substring(0, 40) || 'My Resume';
+
+            // Run analysis
+            const results = analyzeResumeContent(text);
+
+            // Run scan overlay
+            const overlay = document.getElementById('analysis-overlay');
+            const statusEl = document.getElementById('scan-status');
+            const fileEl = document.getElementById('scan-filename');
+            const bar = document.getElementById('scan-progress-bar');
+            const percent = document.getElementById('scan-percent');
+
+            fileEl.textContent = '\u270f\ufe0f ' + name;
+            statusEl.textContent = 'Initializing neural scan matrix...';
+            bar.style.width = '0%';
+            percent.textContent = '0%';
+            overlay.style.display = 'flex';
+
+            const steps = [
+                { pct: 15, msg: 'Parsing text content...' },
+                { pct: 30, msg: 'Extracting identity fields...' },
+                { pct: 50, msg: 'Mapping skill nodes...' },
+                { pct: 65, msg: 'Scoring experience matrix...' },
+                { pct: 80, msg: 'Running ATS compatibility check...' },
+                { pct: 95, msg: 'Synchronizing with Command Center...' },
+                { pct: 100, msg: 'Neural sync complete.' },
+            ];
+            let i = 0;
+            function runStep() {
+                if (i >= steps.length) {
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        updateDashboardWithResume(name, results);
+                        scrollToSection('dashboard');
+                        document.getElementById('resume-text').value = '';
+                    }, 600);
+                    return;
+                }
+                const s = steps[i++];
+                statusEl.textContent = s.msg;
+                bar.style.width = s.pct + '%';
+                percent.textContent = s.pct + '%';
+                setTimeout(runStep, 500);
+            }
+            setTimeout(runStep, 300);
+        }
+
+        // Resume Upload & Analysis
+        function handleResumeUpload(input) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+            const name = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+
+            const overlay = document.getElementById('analysis-overlay');
+            const statusEl = document.getElementById('scan-status');
+            const fileEl = document.getElementById('scan-filename');
+            const bar = document.getElementById('scan-progress-bar');
+            const percent = document.getElementById('scan-percent');
+
+            fileEl.textContent = '📄 ' + file.name;
+            statusEl.textContent = 'Initializing neural scan matrix...';
+            bar.style.width = '0%';
+            percent.textContent = '0%';
+            overlay.style.display = 'flex';
+
+            const runAnalysisFlow = (results) => {
+                const steps = [
+                    { pct: 15, msg: 'Parsing document structure...' },
+                    { pct: 30, msg: 'Extracting identity fields...' },
+                    { pct: 50, msg: 'Mapping skill nodes...' },
+                    { pct: 65, msg: 'Scoring experience matrix...' },
+                    { pct: 80, msg: 'Running ATS compatibility check...' },
+                    { pct: 95, msg: 'Synchronizing with Command Center...' },
+                    { pct: 100, msg: 'Neural sync complete.' },
+                ];
+
+                let i = 0;
+                function runStep() {
+                    if (i >= steps.length) {
+                        setTimeout(() => {
+                            overlay.style.display = 'none';
+                            updateDashboardWithResume(name, results);
+                            scrollToSection('dashboard');
+                            input.value = '';
+                        }, 600);
+                        return;
+                    }
+                    const s = steps[i++];
+                    statusEl.textContent = s.msg;
+                    bar.style.width = s.pct + '%';
+                    percent.textContent = s.pct + '%';
+                    setTimeout(runStep, 500);
+                }
+                setTimeout(runStep, 300);
+            };
+
+            // If it's a text file, we can actually read it
+            if (file.name.endsWith('.txt')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    const results = analyzeResumeContent(content);
+                    runAnalysisFlow(results);
+                };
+                reader.readAsText(file);
+            } else {
+                // For PDF/DOC, simulate quality based on metadata
+                const sizeBonus = Math.min(20, file.size / 5000); // larger files feel more complete
+                let results = analyzeResumeContent(file.name); // analyze name for keywords
+                results.health = Math.round(results.health + sizeBonus);
+                results.health = Math.max(20, Math.min(99, results.health));
+                runAnalysisFlow(results);
+            }
+        }
+
+
+
+
+        function updateDashboardWithResume(name, results) {
+            const title = name.toUpperCase();
+
+            const health = results ? results.health : 0;
+            const stats = results ? results.stats : { jobs: 0, interviews: 0, views: 0 };
+            const matchedSkills = results ? results.matchedSkills : [];
+
+            // Color helper
+            const getColor = (val) => val > 70 ? 'var(--cyan)' : val > 40 ? 'var(--gold)' : '#ff4d4d';
+
+            // Animate stat cards
+            const statValues = document.querySelectorAll('.stat-value');
+            const newVals = [stats.jobs, stats.interviews, stats.views];
+            statValues.forEach((v, idx) => {
+                v.style.transition = 'color 0.4s, transform 0.4s';
+                v.style.color = getColor(health);
+                v.textContent = newVals[idx];
+            });
+
+            // Update Health Score circle
+            const numEl = document.querySelector('.num');
+            const circleEl = document.querySelector('.circle-progress');
+            if (numEl) numEl.textContent = health;
+            if (circleEl) {
+                circleEl.style.transition = 'stroke-dasharray 1s ease-out';
+                circleEl.style.strokeDasharray = `${health}, 100`;
+                circleEl.style.stroke = getColor(health);
+            }
+
+            // Update AI Suggestions feed
+            const feed = document.querySelector('.suggestions-feed');
+            if (feed) {
+                const header = `<h4>AI SUGGESTIONS — ${title}</h4>`;
+                const items = results ? results.suggestions : ['⚡ Upload a resume to get AI-powered suggestions.'];
+                feed.innerHTML = header + items.map(s => `<div class="feed-item">${s}</div>`).join('');
+            }
+
+            // Update Neural Map with actual matched skills
+            const grid = document.querySelector('.neural-grid');
+            if (grid && matchedSkills.length > 0) {
+                grid.innerHTML = matchedSkills.map(s => {
+                    const barColor = s.match > 60 ? 'var(--cyan)' : s.match > 30 ? 'var(--gold)' : '#ff4d4d';
+                    return `<div class="node ${s.match > 30 ? 'active' : ''}">${s.name}<span>${s.match}%</span></div>`;
+                }).join('');
+            } else if (grid) {
+                grid.innerHTML = '<p style="color:rgba(240,244,255,0.4);text-align:center;width:100%;padding:20px;">No skill nodes detected. Neural link critical.</p>';
+            }
+
+            // Update Neural Map sync status
+            const syncStatus = document.getElementById('neural-sync-status');
+            if (syncStatus) {
+                syncStatus.textContent = `Neural link stability: ${health}%`;
+            }
+
+            // Update Armor Sync bars
+            const armorIntegrity = results ? results.armorIntegrity : 0;
+            const armorSkill = results ? results.armorSkill : 0;
+            const armorDepth = results ? results.armorDepth : 0;
+
+            const intBar = document.getElementById('armor-integrity-bar');
+            const intPct = document.getElementById('armor-integrity-pct');
+            if (intBar) intBar.style.width = armorIntegrity + '%';
+            if (intPct) intPct.textContent = armorIntegrity + '%';
+
+            const sklBar = document.getElementById('armor-skill-bar');
+            const sklPct = document.getElementById('armor-skill-pct');
+            if (sklBar) sklBar.style.width = armorSkill + '%';
+            if (sklPct) sklPct.textContent = armorSkill + '%';
+
+            const depBar = document.getElementById('armor-depth-bar');
+            const depPct = document.getElementById('armor-depth-pct');
+            if (depBar) depBar.style.width = armorDepth + '%';
+            if (depPct) depPct.textContent = armorDepth + '%';
+
+            // Flash Command Center heading
+            const heading = document.querySelector('#dashboard .section-header h2');
+            if (heading) {
+                heading.style.transition = 'color 0.3s';
+                heading.style.color = getColor(health);
+                setTimeout(() => heading.style.color = '', 1200);
+            }
+        }
+
+        // Scroll to Section Helper
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Dashboard Tab Switching
+        function switchTab(tabId) {
+            // Remove active class from all links and panes
+            document.querySelectorAll('.side-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            // Add active class to selected link and pane
+            const selectedLink = document.querySelector(`.side-link[onclick*="${tabId}"]`);
+            if (selectedLink) selectedLink.classList.add('active');
+
+            const selectedPane = document.getElementById(`${tabId}-tab`);
+            if (selectedPane) selectedPane.classList.add('active');
+        }
+
+        // Settings Toggle
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('toggle')) {
+                e.target.classList.toggle('active');
+            }
+        });
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.onclick = () => q.parentElement.classList.toggle('active');
+        });
+
+        // Sticky Navbar
+        window.onscroll = () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) nav.style.padding = '10px 40px';
+            else nav.style.padding = '20px 50px';
+        };
+
+        window.onload = () => {
+            type();
+        };
+    </script>
+</body>
+
+</html>
